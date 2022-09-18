@@ -13,13 +13,14 @@ let gridlessPathfinders = new Map();
 let gridWidth, gridHeight;
 
 export function isPathfindingEnabled() {
-	if (this.user !== game.user)
+	if (this.user.id !== game.user._id)
 		return false;
 	if (!game.user.isGM && !game.settings.get(settingsKey, "allowPathfinding"))
 		return false;
 	if (moveWithoutAnimation)
 		return false;
-	return game.settings.get(settingsKey, "autoPathfinding") != togglePathfinding;
+	//Pathfinding removed, waiting for the true update to retrieve it
+	return false;// game.settings.get(settingsKey, "autoPathfinding") != togglePathfinding;
 }
 
 export function findPath(from, to, token, previousWaypoints) {

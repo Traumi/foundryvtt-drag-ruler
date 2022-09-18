@@ -4,7 +4,7 @@
 	"description": "When dragging a token displays a ruler showing how far you've moved that token.",
 	"version": "1.12.8",
 	"minimumCoreVersion" : "9.245",
-	"compatibleCoreVersion" : "9",
+	"compatibleCoreVersion" : "10.285",
 	"authors": [
 		{
 			"name": "Manuel Vögele",
@@ -64,7 +64,7 @@
 		}
 	],
 	"socket": true,
-	"url": "https://github.com/manuelVo/foundryvtt-drag-ruler",
+	"url": "https://github.com/Traumi/foundryvtt-drag-ruler",
 	"download": "https://github.com/manuelVo/foundryvtt-drag-ruler/releases/download/v1.12.8/drag-ruler-1.12.8.zip",
 	"manifest": "https://raw.githubusercontent.com/manuelVo/foundryvtt-drag-ruler/master/module.json",
 	"readme": "https://github.com/manuelVo/foundryvtt-drag-ruler/blob/master/README.md",

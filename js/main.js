@@ -1,18 +1,19 @@
 "use strict"
 
-import {getColorForDistanceAndToken, getMovedDistanceFromToken, getRangesFromSpeedProvider, initApi, registerModule, registerSystem} from "./api.js";
+import {currentSpeedProvider, getColorForDistanceAndToken, getMovedDistanceFromToken, getRangesFromSpeedProvider, initApi, registerModule, registerSystem} from "./api.js";
 import {checkDependencies, getHexSizeSupportTokenGridCenter} from "./compatibility.js";
-import {moveEntities, onMouseMove} from "./foundry_imports.js"
+import {cancelScheduledMeasurement, measure, moveEntities, onMouseMove} from "./foundry_imports.js"
 import {disableSnap, registerKeybindings} from "./keybindings.js";
 import {libWrapper} from "./libwrapper_shim.js";
 import {performMigrations} from "./migration.js"
 import {removeLastHistoryEntryIfAt, resetMovementHistory} from "./movement_tracking.js";
 import {wipePathfindingCache, initializePathfinding} from "./pathfinding.js";
-import {extendRuler} from "./ruler.js";
+import {DragRulerRuler} from "./ruler.js";
 import {registerSettings, RightClickAction, settingsKey} from "./settings.js"
 import {recalculate} from "./socket.js";
 import {SpeedProvider} from "./speed_provider.js"
-import {setSnapParameterOnOptions} from "./util.js";
+import {getSnapPointForEntity, setSnapParameterOnOptions} from "./util.js";
+import {getMovementHistory} from "./movement_tracking.js";
 
 import initGridlessPathfinding, * as GridlessPathfinding from "../wasm/gridless_pathfinding.js"
 
@@ -38,8 +39,6 @@ Hooks.once("init", () => {
 	hookDragHandlers(MeasuredTemplate);
 	libWrapper.register("drag-ruler", "TokenLayer.prototype.undoHistory", tokenLayerUndoHistory, "WRAPPER");
 
-	extendRuler();
-
 	window.dragRuler = {
 		getColorForDistanceAndToken,
 		getMovedDistanceFromToken,
@@ -59,6 +58,30 @@ Hooks.once("ready", () => {
 })
 
 Hooks.on("canvasReady", () => {
+
+	//Import ruler.js
+	const toast = new DragRulerRuler(canvas.controls.ruler.user, canvas.controls.ruler.color)
+	const ruler = canvas.controls.ruler
+	ruler.previousWaypoints = [];
+	ruler.previousLabels = ruler.addChild(new PIXI.Container());
+	ruler.clear = toast.clear
+	ruler.moveToken = toast.moveToken
+	ruler.toJSON = toast.toJSON
+	ruler.update = toast.update
+	ruler.measure = toast.measure
+	ruler._endMeasurement = toast._endMeasurement
+	ruler.dragRulerAddWaypoint = toast.dragRulerAddWaypoint
+	ruler.dragRulerAddWaypointHistory = toast.dragRulerAddWaypointHistory
+	ruler.dragRulerClearWaypoints = toast.dragRulerClearWaypoints
+	ruler.dragRulerDeleteWaypoint = toast.dragRulerDeleteWaypoint
+	ruler.dragRulerRemovePathfindingWaypoints = toast.dragRulerRemovePathfindingWaypoints
+	ruler.dragRulerAbortDrag = toast.dragRulerAbortDrag
+	ruler.dragRulerRecalculate = toast.dragRulerRecalculate
+	ruler.dragRulerGetColorForDistance = toast.dragRulerGetColorForDistance
+	ruler.dragRulerStart = toast.dragRulerStart
+	ruler.dragRulerSendState = toast.dragRulerSendState
+	//FIN IMPORT
+
 	canvas.controls.rulers.children.forEach(ruler => {
 		ruler.draggedEntity = null;
 		Object.defineProperty(ruler, "isDragRuler", {
@@ -113,6 +136,7 @@ function onEntityLeftDragStart(wrapped, event) {
 	wrapped(event);
 	const isToken = this instanceof Token;
 	const ruler = canvas.controls.ruler
+
 	ruler.draggedEntity = this;
 	let entityCenter;
 	if (isToken && canvas.grid.isHex && game.modules.get("hex-size-support")?.active && CONFIG.hexSizeSupport.getAltSnappingFlag(this))

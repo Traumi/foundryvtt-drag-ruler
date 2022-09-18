@@ -97,14 +97,14 @@ export function registerSettings() {
 		onChange: delayedReload,
 	});
 
-	game.settings.register(settingsKey, "autoPathfinding", {
+	/*game.settings.register(settingsKey, "autoPathfinding", {
 		name: "drag-ruler.settings.autoPathfinding.name",
 		hint: "drag-ruler.settings.autoPathfinding.hint",
 		scpoe: "client",
 		config: early_isGM() || game.settings.get(settingsKey, "allowPathfinding"),
 		type: Boolean,
 		defualt: false,
-	});
+	});*/
 
 	game.settings.register(settingsKey, "lastTerrainRulerHintTime", {
 		config: false,

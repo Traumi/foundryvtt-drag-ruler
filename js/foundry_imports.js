@@ -8,6 +8,43 @@ import {settingsKey} from "./settings.js";
 import {recalculate} from "./socket.js";
 import {applyTokenSizeOffset, enumeratedZip, getSnapPointForEntity, getSnapPointForToken, getSnapPointForTokenObj, getTokenShape, highlightTokenShape, sum} from "./util.js";
 
+class DragRulerToken extends Token {
+	// Functions below are overridden versions of functions in Ruler
+	constructor(document) {
+		super(document);
+	}
+
+	checkCollisionReplaced(destination, {origin, type="move", mode="any"}={}) {
+
+		// The test origin is the last confirmed valid position of the Token
+		const center = origin || {x: this.x+1, y: this.y+1}; //this.getCenter(this.x, this.y); <- Temporary fix to avoid usebug
+		origin = this.getMovementAdjustedPoint(center);
+		// The test destination is the adjusted point based on the proposed movement vector
+		const dx = destination.x - center.x;
+		const dy = destination.y - center.y;
+		const offsetX = dx === 0 ? Math.sign(dx) : Math.sign(dx);
+		const offsetY = dy === 0 ? Math.sign(dy) : Math.sign(dy);
+		destination = this.getMovementAdjustedPoint(destination, {offsetX, offsetY});
+
+		// Reference the correct source object
+		let source;
+		switch ( type ) {
+			case "move":
+				const movement = new MovementSource(this);
+				source = movement.initialize({x: origin.x, y: origin.y, elevation: this.document.elevation});
+				break;
+			case "sight":
+			source = this.vision; break;
+			case "light":
+			source = this.light; break;
+			case "sound":
+			throw new Error("Collision testing for Token sound sources is not supported at this time");
+		}
+
+		// Create a movement source passed to the polygon backend
+		return CONFIG.Canvas.losBackend.testCollision(origin, destination, {type, mode, source});
+	}
+}
 // This is a modified version of Ruler.moveToken from foundry 0.7.9
 export async function moveEntities(draggedEntity, selectedEntities) {
 	let wasPaused = game.paused;
@@ -23,15 +60,40 @@ export async function moveEntities(draggedEntity, selectedEntities) {
 
 	// Get the movement rays and check collision along each Ray
 	// These rays are center-to-center for the purposes of collision checking
-	const rays = this.constructor.dragRulerGetRaysFromWaypoints(this.waypoints, this.destination);
+	//const rays = this.dragRulerGetRaysFromWaypoints(this.waypoints, this.destination);
+	if ( this.destination )
+	this.waypoints = this.waypoints.concat([this.destination]);
+	const rays = this.waypoints.slice(1).map((wp, i) => {
+		const ray =  new Ray(this.waypoints[i], wp);
+		ray.isPrevious = Boolean(this.waypoints[i].isPrevious);
+		return ray;
+	});
+/*
+
+*/
 	if (!game.user.isGM && draggedEntity instanceof Token) {
 		const hasCollision = selectedEntities.some(token => {
-			const offset = calculateEntityOffset(token, draggedEntity);
+			let savex = token.x
+			let savey = token.y
+			let isColliding = false;
+			let toast = new DragRulerToken(token.document)
+			token.checkCollision = toast.checkCollisionReplaced
+
+			for(let i = 0 ; i < rays.length ; ++i){
+				if(token.checkCollision(rays[i].B)) isColliding = true;
+				token.x = rays[i].B.x
+				token.y = rays[i].B.y
+			}
+			token.checkCollision = toast.checkCollision
+			token.x = savex
+			token.y = savey
+			return isColliding;
+			/*const offset = calculateEntityOffset(token, draggedEntity);
 			const offsetRays = rays.filter(ray => !ray.isPrevious).map(ray => applyOffsetToRay(ray, offset))
 			if (window.WallHeight) {
 				window.WallHeight.addBoundsToRays(offsetRays, draggedEntity);
 			}
-			return offsetRays.some(r => canvas.walls.checkCollision(r));
+			return offsetRays.some(r => canvas.walls.checkCollision(r));*/
 		})
 		if (hasCollision) {
 			ui.notifications.error(game.i18n.localize("ERROR.TokenCollide"));
@@ -93,9 +155,21 @@ async function animateEntities(entities, draggedEntity, draggedRays, wasPaused) 
 			return {x: path.B.x, y: path.B.y, _id: entity.id};
 		});
 		await draggedEntity.scene.updateEmbeddedDocuments(draggedEntity.constructor.embeddedName, updates, {animate});
+		let nextmove = false;
+		let lastx = draggedEntity.x
+		let lasty = draggedEntity.y
+		while(!nextmove){
+			await sleep(30);
+			if(lastx == draggedEntity.x && lasty == draggedEntity.y)
+				nextmove = true;
+			else{
+				lastx = draggedEntity.x
+				lasty = draggedEntity.y
+			}
+		}
 		if (animate)
 			await Promise.all(entityPaths.map(({entity}) => CanvasAnimation.getAnimation(entity.movementAnimationName)?.promise));
-
+		
 		// This is a flag of the "Monk's Active Tile Triggers" module that signals that the movement should be cancelled early
 		if (this.cancelMovement) {
 			entityAnimationData.forEach(ead => ead.rays = ead.rays.slice(0, i + 1));
@@ -104,6 +178,10 @@ async function animateEntities(entities, draggedEntity, draggedRays, wasPaused) 
 	}
 	if (isToken)
 		trackRays(entities, entityAnimationData.map(({rays}) => rays)).then(() => recalculate(entities));
+}
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 function calculateEntityOffset(entityA, entityB) {
@@ -247,7 +325,6 @@ export function measure(destination, options={}) {
 		centeredSegments.push({ray: centeredRay, label})
 	}
 
-
 	const shape = isToken ? getTokenShape(this.draggedEntity) : null;
 
 	// Compute measured distance
@@ -260,13 +337,12 @@ export function measure(destination, options={}) {
 		totalDistance += d;
 		s.last = i === (centeredSegments.length - 1);
 		s.distance = d;
-		s.text = this._getSegmentLabel(d, totalDistance, s.last);
+		s.text = this._getSegmentLabel(s, totalDistance);
 	}
 
 	// Clear the grid highlight layer
 	const hlt = canvas.grid.highlightLayers[this.name] || canvas.grid.addHighlightLayer(this.name);
 	hlt.clear();
-
 	// Draw measured path
 	r.clear();
 	let rulerColor
