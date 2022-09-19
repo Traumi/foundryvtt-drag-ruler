@@ -7,7 +7,7 @@ export function getDefaultSpeedAttribute() {
 		case "dnd4e":
 			return "actor.data.data.movement.walk.value";
 		case "dnd5e":
-			return "actor.data.data.attributes.movement.walk";
+			return "actor.system.attributes.movement.walk";
 		case "lancer":
 			return "actor.data.data.derived.speed";
 		case "pf1":
