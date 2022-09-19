@@ -5,6 +5,8 @@ It may have some bugs but it should work at least for Foundry v10.285
 
 You can find the original project here : https://github.com/manuelVo/foundryvtt-drag-ruler
 
+When the official update will comes out it should theorically be automatically updated
+
 # Installation
 
 To install this module :
