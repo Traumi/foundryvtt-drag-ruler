@@ -11,4 +11,4 @@ To install this module :
 
 - Find your FoundryData folder (Path in the Configuration tab in the lobby)
 - Go to FoundryData/Data/modules/drag-ruler
-- Replace all this files by those in this repo : module.json, js/foundry_imports.js, js/main.js, js/pathfinding.js, js/ruler.js, js/settings.js, js/utils.js
+- Replace all this files by those in this repo : module.json, js/foundry_imports.js, js/main.js, js/movement_tracking,js/pathfinding.js, js/ruler.js, js/settings.js, js/system.js, js/utils.js
