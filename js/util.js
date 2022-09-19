@@ -142,7 +142,6 @@ export function getAreaFromPositionAndShape(position, shape) {
 }
 
 export function getTokenShape(token) {
-	console.log(token)
 	if (token.scene.grid.type === CONST.GRID_TYPES.GRIDLESS) {
 		return [{x: 0, y: 0}]
 	}
