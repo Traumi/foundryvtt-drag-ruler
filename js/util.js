@@ -46,38 +46,38 @@ export function getSnapPointForToken(x, y, token) {
 
 	const [topLeftX, topLeftY] = canvas.grid.getTopLeft(x, y);
 	let cellX, cellY;
-	if (token.data.width % 2 === 0)
+	if (token.document.width % 2 === 0)
 		cellX = x - canvas.grid.h / 2;
 	else
 		cellX = x;
-	if (token.data.height % 2 === 0)
+	if (token.document.height % 2 === 0)
 		cellY = y - canvas.grid.h / 2;
 	else
 		cellY = y;
 	const [centerX, centerY] = canvas.grid.getCenter(cellX, cellY);
 	let snapX, snapY;
 	// Tiny tokens can snap to the cells corners
-	if (token.data.width <= 0.5) {
+	if (token.document.width <= 0.5) {
 		const offsetX = x - topLeftX;
 		const subGridWidth = Math.floor(canvas.grid.w / 2);
 		const subGridPosX = Math.floor(offsetX / subGridWidth);
 		snapX = topLeftX + (subGridPosX + 0.5) * subGridWidth;
 	}
 	// Tokens with odd multipliers (1x1, 3x3, ...) and tokens smaller than 1x1 but bigger than 0.5x0.5 snap to the center of the grid cell
-	else if (Math.round(token.data.width) % 2 === 1 || token.data.width < 1) {
+	else if (Math.round(token.document.width) % 2 === 1 || token.document.width < 1) {
 		snapX = centerX;
 	}
 	// All remaining tokens (those with even or fractional multipliers on square grids) snap to the intersection points of the grid
 	else {
 		snapX = centerX + canvas.grid.w / 2;
 	}
-	if (token.data.height <= 0.5) {
+	if (token.document.height <= 0.5) {
 		const offsetY = y - topLeftY;
 		const subGridHeight = Math.floor(canvas.grid.h / 2);
 		const subGridPosY = Math.floor(offsetY / subGridHeight);
 		snapY = topLeftY + (subGridPosY + 0.5) * subGridHeight;
 	}
-	else if (Math.round(token.data.height) % 2 === 1 || token.data.height < 1) {
+	else if (Math.round(token.document.height) % 2 === 1 || token.document.height < 1) {
 		snapY = centerY;
 	}
 	else {
@@ -142,15 +142,16 @@ export function getAreaFromPositionAndShape(position, shape) {
 }
 
 export function getTokenShape(token) {
-	if (token.scene.data.gridType === CONST.GRID_TYPES.GRIDLESS) {
+	console.log(token)
+	if (token.scene.grid.type === CONST.GRID_TYPES.GRIDLESS) {
 		return [{x: 0, y: 0}]
 	}
-	else if (token.scene.data.gridType === CONST.GRID_TYPES.SQUARE) {
-		const topOffset = -Math.floor(token.data.height / 2)
-		const leftOffset = -Math.floor(token.data.width / 2)
+	else if (token.scene.grid.type === CONST.GRID_TYPES.SQUARE) {
+		const topOffset = -Math.floor(token.document.height / 2)
+		const leftOffset = -Math.floor(token.document.width / 2)
 		const shape = []
-		for (let y = 0;y < token.data.height;y++) {
-			for (let x = 0;x < token.data.width;x++) {
+		for (let y = 0;y < token.document.height;y++) {
+			for (let x = 0;x < token.document.width;x++) {
 				shape.push({x: x + leftOffset, y: y + topOffset})
 			}
 		}
@@ -159,7 +160,7 @@ export function getTokenShape(token) {
 	else {
 		// Hex grids
 		if (game.modules.get("hex-size-support")?.active && CONFIG.hexSizeSupport.getAltSnappingFlag(token)) {
-			const borderSize = token.data.flags["hex-size-support"].borderSize;
+			const borderSize = token.document.flags["hex-size-support"].borderSize;
 			let shape = [{x: 0, y: 0}];
 			if (borderSize >= 2)
 				shape = shape.concat([{x: 0, y: -1}, {x: -1, y: -1}]);
@@ -182,13 +183,13 @@ export function getTokenShape(token) {
 
 export function getTokenSize(token) {
 	let w, h;
-	const hexSizeSupportBorderSize = token.data.flags["hex-size-support"]?.borderSize;
+	const hexSizeSupportBorderSize = token.document.flags["hex-size-support"]?.borderSize;
 	if (hexSizeSupportBorderSize > 0) {
 		w = h = hexSizeSupportBorderSize
 	}
 	else {
-		w = token.data.width
-		h = token.data.height
+		w = token.document.width
+		h = token.document.height
 	}
 	return {w, h};
 }

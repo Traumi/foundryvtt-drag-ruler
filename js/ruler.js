@@ -172,7 +172,7 @@ export class DragRulerRuler extends Ruler {
 		// Don't apply colors if the current user doesn't have at least observer permissions
 		if (this.draggedEntity.actor.permission < 2) {
 			// If this is a pc and alwaysShowSpeedForPCs is enabled we show the color anyway
-			if (!(this.draggedEntity.actor.data.type === "character" && game.settings.get(settingsKey, "alwaysShowSpeedForPCs")))
+			if (!(this.draggedEntity.actor.document.type === "character" && game.settings.get(settingsKey, "alwaysShowSpeedForPCs")))
 				return this.color;
 		}
 		distance = Math.round(distance * 100) / 100;

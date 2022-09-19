@@ -25,7 +25,7 @@ class DragRulerToken extends Token {
 		const offsetX = dx === 0 ? Math.sign(dx) : Math.sign(dx);
 		const offsetY = dy === 0 ? Math.sign(dy) : Math.sign(dy);
 		destination = this.getMovementAdjustedPoint(destination, {offsetX, offsetY});
-
+		
 		// Reference the correct source object
 		let source;
 		switch ( type ) {
@@ -40,7 +40,7 @@ class DragRulerToken extends Token {
 			case "sound":
 			throw new Error("Collision testing for Token sound sources is not supported at this time");
 		}
-
+		
 		// Create a movement source passed to the polygon backend
 		return CONFIG.Canvas.losBackend.testCollision(origin, destination, {type, mode, source});
 	}
@@ -68,9 +68,7 @@ export async function moveEntities(draggedEntity, selectedEntities) {
 		ray.isPrevious = Boolean(this.waypoints[i].isPrevious);
 		return ray;
 	});
-/*
 
-*/
 	if (!game.user.isGM && draggedEntity instanceof Token) {
 		const hasCollision = selectedEntities.some(token => {
 			let savex = token.x
@@ -125,12 +123,12 @@ async function animateEntities(entities, draggedEntity, draggedRays, wasPaused) 
 		const origin = [firstWaypoint.x + entityOffset.x, firstWaypoint.y + entityOffset.y];
 		let dx, dy;
 		if (canvas.grid.type === CONST.GRID_TYPES.GRIDLESS) {
-			dx = entity.data.x - origin[0];
-			dy = entity.data.y - origin[1];
+			dx = entity.document.x - origin[0];
+			dy = entity.document.y - origin[1];
 		}
 		else {
-			dx = entity.data.x - origin[0];
-			dy = entity.data.y - origin[1];
+			dx = entity.document.x - origin[0];
+			dy = entity.document.y - origin[1];
 		}
 
 		return {entity, rays: offsetRays, dx, dy};
@@ -185,7 +183,7 @@ function sleep(ms) {
 }
 
 function calculateEntityOffset(entityA, entityB) {
-	return {x: entityA.data.x - entityB.data.x, y: entityA.data.y - entityB.data.y};
+	return {x: entityA.document.x - entityB.document.x, y: entityA.document.y - entityB.document.y};
 }
 
 function applyOffsetToRay(ray, offset) {
@@ -403,7 +401,7 @@ export function measure(destination, options={}) {
 }
 
 export function highlightMeasurementNative(ray, previousSegments, tokenShape=[{x: 0, y: 0}], alpha=1) {
-	const spacer = canvas.scene.data.gridType === CONST.GRID_TYPES.SQUARE ? 1.41 : 1;
+	const spacer = canvas.scene.data.grid.type === CONST.GRID_TYPES.SQUARE ? 1.41 : 1;
 	const nMax = Math.max(Math.floor(ray.distance / (spacer * Math.min(canvas.grid.w, canvas.grid.h))), 1);
 	const tMax = Array.fromRange(nMax+1).map(t => t / nMax);
 
