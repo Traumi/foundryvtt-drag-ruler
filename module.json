@@ -3,8 +3,10 @@
 	"title": "Drag Ruler",
 	"description": "When dragging a token displays a ruler showing how far you've moved that token.",
 	"version": "1.12.8",
-	"minimumCoreVersion" : "9.245",
-	"compatibleCoreVersion" : "10.285",
+	"compatibility": {
+		"minimum": "10",
+		"verified": "10.286"
+	},
 	"authors": [
 		{
 			"name": "Manuel Vögele",
