@@ -8,7 +8,7 @@ import {libWrapper} from "./libwrapper_shim.js";
 import {performMigrations} from "./migration.js"
 import {removeLastHistoryEntryIfAt, resetMovementHistory} from "./movement_tracking.js";
 import {wipePathfindingCache, initializePathfinding} from "./pathfinding.js";
-import {DragRulerRuler} from "./ruler.js";
+import {extendRuler} from "./ruler.js";
 import {registerSettings, RightClickAction, settingsKey} from "./settings.js"
 import {recalculate} from "./socket.js";
 import {SpeedProvider} from "./speed_provider.js"
@@ -39,6 +39,8 @@ Hooks.once("init", () => {
 	hookDragHandlers(MeasuredTemplate);
 	libWrapper.register("drag-ruler", "TokenLayer.prototype.undoHistory", tokenLayerUndoHistory, "WRAPPER");
 
+	extendRuler();
+
 	window.dragRuler = {
 		getColorForDistanceAndToken,
 		getMovedDistanceFromToken,
@@ -58,30 +60,6 @@ Hooks.once("ready", () => {
 })
 
 Hooks.on("canvasReady", () => {
-
-	//Import ruler.js
-	const toast = new DragRulerRuler(canvas.controls.ruler.user, canvas.controls.ruler.color)
-	const ruler = canvas.controls.ruler
-	ruler.previousWaypoints = [];
-	ruler.previousLabels = ruler.addChild(new PIXI.Container());
-	ruler.clear = toast.clear
-	ruler.moveToken = toast.moveToken
-	ruler.toJSON = toast.toJSON
-	ruler.update = toast.update
-	ruler.measure = toast.measure
-	ruler._endMeasurement = toast._endMeasurement
-	ruler.dragRulerAddWaypoint = toast.dragRulerAddWaypoint
-	ruler.dragRulerAddWaypointHistory = toast.dragRulerAddWaypointHistory
-	ruler.dragRulerClearWaypoints = toast.dragRulerClearWaypoints
-	ruler.dragRulerDeleteWaypoint = toast.dragRulerDeleteWaypoint
-	ruler.dragRulerRemovePathfindingWaypoints = toast.dragRulerRemovePathfindingWaypoints
-	ruler.dragRulerAbortDrag = toast.dragRulerAbortDrag
-	ruler.dragRulerRecalculate = toast.dragRulerRecalculate
-	ruler.dragRulerGetColorForDistance = toast.dragRulerGetColorForDistance
-	ruler.dragRulerStart = toast.dragRulerStart
-	ruler.dragRulerSendState = toast.dragRulerSendState
-	//FIN IMPORT
-
 	canvas.controls.rulers.children.forEach(ruler => {
 		ruler.draggedEntity = null;
 		Object.defineProperty(ruler, "isDragRuler", {
@@ -270,9 +248,7 @@ function applyGridlessSnapping(event) {
 		const distance = Math.hypot(deltaX, deltaY);
 		// targetRange will be the largest range that's still smaller than distance
 		let targetDistance = ranges
-			.map(range => range.range)
-			.map(range => range - waypointDistance)
-			.map(range => range * canvas.dimensions.size / canvas.dimensions.distance)
+			.map(range => (range.range - waypointDistance) * canvas.dimensions.size / canvas.dimensions.distance)
 			.filter(range => range < distance)
 			.reduce((a, b) => Math.max(a, b), 0);
 		if (targetDistance) {
