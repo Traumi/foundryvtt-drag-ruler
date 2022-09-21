@@ -18,3 +18,4 @@ To install this module :
 # Known Bug
 
 - Pathfinding doesn't work
+- Token can sometimes get stuck when he is partially on a wall at his top or left (this is due to a fix to prevent token to see through walls when making a fragmented movement)
