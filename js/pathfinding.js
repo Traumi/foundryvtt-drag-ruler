@@ -19,13 +19,11 @@ export function isPathfindingEnabled() {
 		return false;
 	if (moveWithoutAnimation)
 		return false;
-	//Pathfinding removed, waiting for the true update to retrieve it
-	return false;// game.settings.get(settingsKey, "autoPathfinding") != togglePathfinding;
+	return game.settings.get(settingsKey, "autoPathfinding") != togglePathfinding;
 }
 
 export function findPath(from, to, token, previousWaypoints) {
 	checkCacheValid(token);
-
 	if (canvas.grid.type === CONST.GRID_TYPES.GRIDLESS) {
 		let tokenSize = Math.max(token.document.width, token.document.height) * canvas.dimensions.size;
 		let pathfinder = gridlessPathfinders.get(tokenSize);
@@ -115,8 +113,9 @@ function calculatePath(from, to, token, previousWaypoints) {
 		nextNodes.sort((a, b) => b.estimated - a.estimated);
 		// Get node with cheapest estimate
 		const currentNode = nextNodes.pop();
-		if (currentNode.node.x === from.x && currentNode.node.y === from.y)
+		if (currentNode.node.x === from.x && currentNode.node.y === from.y){
 			return currentNode;
+		}
 		previousNodes.add(currentNode.node);
 		for (const edge of currentNode.node.edges) {
 			const neighborNode = getNode(edge.target, token);
@@ -152,7 +151,7 @@ function estimateCost(pos, target) {
 function stepCollidesWithWall(from, to, token) {
 	const stepStart = getSnapPointForTokenObj(getPixelsFromGridPositionObj(from), token);
 	const stepEnd = getSnapPointForTokenObj(getPixelsFromGridPositionObj(to), token);
-	return canvas.walls.checkCollision(new Ray(stepStart, stepEnd));
+	return canvas.walls.checkCollision(new Ray(stepStart, stepEnd), {mode: "any", type: "move"});
 }
 
 export function wipePathfindingCache() {

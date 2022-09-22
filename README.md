@@ -17,20 +17,15 @@ To install this module :
 
 -OR-
 
-- Find your FoundryData folder (Path in the Configuration tab in the lobby)
-- Go to FoundryData/Data/modules/drag-ruler
-- Replace all this files by those in this repo : module.json, js/foundry_imports.js, js/main.js, js/movement_tracking, js/pathfinding.js, js/ruler.js, js/settings.js, js/speed_provider.js, js/system.js, js/utils.js
-
--OR-
-
-- Download the archive in https://github.com/Traumi/foundryvtt-drag-ruler/blob/master/download_zip/drag-ruler-fix-1.rar
+- Download the archive in https://github.com/Traumi/foundryvtt-drag-ruler/blob/master/download_zip/drag-ruler-1.12.10.zip
 - Replace the drag-ruler folder in FoundryData/Data/modules/drag-ruler by the one in the archive
 
 # Last updates
 
+- 23/09/2022 : Fixed the pathfinding part
 - 22/09/2022 : Linked the module.json to this project
 - 22/09/2022 : Fixed a bug where tokens could sometime get stuck into walls
 
 # Known Bug
 
-- Pathfinding doesn't work
+- No one for now :)
