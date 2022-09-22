@@ -14,16 +14,15 @@ class DragRulerToken extends Token {
 		super(document);
 	}
 
-	checkCollisionReplaced(destination, {origin, type="move", mode="any"}={}) {
-
+	checkCollisionReplaced(destination, start, {origin, type="move", mode="any"}={}) {
 		// The test origin is the last confirmed valid position of the Token
-		const center = origin || {x: this.x+1, y: this.y+1}; //this.getCenter(this.x, this.y); <- Temporary fix to avoid usebug
+		const center = start
 		origin = this.getMovementAdjustedPoint(center);
 		// The test destination is the adjusted point based on the proposed movement vector
 		const dx = destination.x - center.x;
 		const dy = destination.y - center.y;
-		const offsetX = dx === 0 ? Math.sign(dx) : Math.sign(dx);
-		const offsetY = dy === 0 ? Math.sign(dy) : Math.sign(dy);
+		const offsetX = dx === 0 ? Math.sign(dx) : Math.sign(dx); // const offsetX = dx === 0 ? this.#priorMovement.ox : Math.sign(dx);
+		const offsetY = dy === 0 ? Math.sign(dy) : Math.sign(dy); // const offsetY = dy === 0 ? this.#priorMovement.oy : Math.sign(dy);
 		destination = this.getMovementAdjustedPoint(destination, {offsetX, offsetY});
 		// Reference the correct source object
 		let source;
@@ -31,7 +30,7 @@ class DragRulerToken extends Token {
 			case "move":
 				const movement = new MovementSource(this);
 				source = movement.initialize({x: origin.x, y: origin.y, elevation: this.document.elevation});
-				break;
+				break; // source = this.#getMovementSource(origin); break;
 			case "sight":
 			source = this.vision; break;
 			case "light":
@@ -75,9 +74,8 @@ export async function moveEntities(draggedEntity, selectedEntities) {
 			let isColliding = false;
 			let toast = new DragRulerToken(token.document)
 			token.checkCollision = toast.checkCollisionReplaced
-
 			for(let i = 0 ; i < rays.length ; ++i){
-				if(token.checkCollision(rays[i].B)) isColliding = true;
+				if(token.checkCollision(rays[i].B, rays[i].A)) isColliding = true;
 				token.x = rays[i].B.x
 				token.y = rays[i].B.y
 			}

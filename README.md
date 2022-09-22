@@ -15,7 +15,10 @@ To install this module :
 - Go to FoundryData/Data/modules/drag-ruler
 - Replace all this files by those in this repo : module.json, js/foundry_imports.js, js/main.js, js/movement_tracking, js/pathfinding.js, js/ruler.js, js/settings.js, js/speed_provider.js, js/system.js, js/utils.js
 
+# Last updates
+
+- 20/09/2022 : Fixed a bug where tokens could sometime get stuck into walls
+
 # Known Bug
 
 - Pathfinding doesn't work
-- Token can sometimes get stuck when he is partially on a wall at his top or left (this is due to a fix to prevent token to see through walls when making a fragmented movement)
