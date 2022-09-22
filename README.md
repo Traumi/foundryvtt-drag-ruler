@@ -11,6 +11,12 @@ When the official update will comes out it should theorically be automatically u
 
 To install this module :
 
+- Inside Foundry, select the Game Modules tab in the Configuration and Setup menu.
+- Click the Install Module button and enter the following URL : `https://raw.githubusercontent.com/Traumi/foundryvtt-drag-ruler/master/module.json`
+- Click Install and wait for installation to complete.
+
+-OR-
+
 - Find your FoundryData folder (Path in the Configuration tab in the lobby)
 - Go to FoundryData/Data/modules/drag-ruler
 - Replace all this files by those in this repo : module.json, js/foundry_imports.js, js/main.js, js/movement_tracking, js/pathfinding.js, js/ruler.js, js/settings.js, js/speed_provider.js, js/system.js, js/utils.js
@@ -22,7 +28,8 @@ To install this module :
 
 # Last updates
 
-- 20/09/2022 : Fixed a bug where tokens could sometime get stuck into walls
+- 22/09/2022 : Linked the module.json to this project
+- 22/09/2022 : Fixed a bug where tokens could sometime get stuck into walls
 
 # Known Bug
 
