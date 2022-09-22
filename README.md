@@ -23,7 +23,7 @@ To install this module :
 
 -OR-
 
-- Download the archive in https://github.com/Traumi/foundryvtt-drag-ruler/blob/master/download_zip/drag-ruler-fix-1.rar
+- Download the archive in https://github.com/Traumi/foundryvtt-drag-ruler/releases/download/v1.12.9/drag-ruler-1.12.9.zip
 - Replace the drag-ruler folder in FoundryData/Data/modules/drag-ruler by the one in the archive
 
 # Last updates
