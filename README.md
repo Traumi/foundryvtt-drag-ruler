@@ -17,14 +17,20 @@ To install this module :
 
 -OR-
 
-- Download the archive in https://github.com/Traumi/foundryvtt-drag-ruler/blob/master/download_zip/drag-ruler-1.12.10.zip
+- Download the archive in https://github.com/Traumi/foundryvtt-drag-ruler/blob/master/download_zip/drag-ruler-1.12.11.zip
 - Replace the drag-ruler folder in FoundryData/Data/modules/drag-ruler by the one in the archive
 
-# Last updates
+# Changelog
 
-- 23/09/2022 : Fixed the pathfinding part
-- 22/09/2022 : Linked the module.json to this project
-- 22/09/2022 : Fixed a bug where tokens could sometime get stuck into walls
+1.12.11
+- Fixed a bug that were preventing waypoints to work on gridless maps
+
+1.12.10
+- Fixed the pathfinding part
+
+1.12.9
+- Linked the module.json to this project
+- Fixed a bug where tokens could sometime get stuck into walls
 
 # Known Bug
 

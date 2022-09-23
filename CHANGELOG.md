@@ -1,3 +1,15 @@
+## 1.12.11
+### Bugfixes
+- Fixed the waypoints that were not working on gridless maps
+
+## 1.12.10
+### Bugfixes
+- Fixed the pathfinding not working
+
+## 1.12.9
+### Compatibility
+- Updated for Foundry v10
+
 ## 1.12.8
 ### Bugfixes
 - Fixed a bug that could cause grid cells to be highlighted in the wrong color

@@ -1,7 +1,7 @@
 {
 	"title": "Drag Ruler (Traumi's Patch)",
 	"description": "When dragging a token displays a ruler showing how far you've moved that token.",
-	"version": "1.12.10",
+	"version": "1.12.11",
 	"authors": [
 	  {
 		"name": "Manuel Vögele",
