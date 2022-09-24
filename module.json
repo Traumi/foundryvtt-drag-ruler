@@ -1,7 +1,7 @@
 {
 	"title": "Drag Ruler (Traumi's Patch)",
 	"description": "When dragging a token displays a ruler showing how far you've moved that token.",
-	"version": "1.12.12",
+	"version": "1.12.13",
 	"authors": [
 	  {
 		"name": "Manuel Vögele",
@@ -66,7 +66,7 @@
 	],
 	"socket": true,
 	"url": "https://github.com/Traumi/foundryvtt-drag-ruler",
-	"download": "https://github.com/Traumi/foundryvtt-drag-ruler/releases/download/v1.12.12/drag-ruler-1.12.12.zip",
+	"download": "https://github.com/Traumi/foundryvtt-drag-ruler/releases/download/v1.12.13/drag-ruler-1.12.13.zip",
 	"manifest": "https://raw.githubusercontent.com/Traumi/foundryvtt-drag-ruler/master/module.json",
 	"readme": "https://github.com/Traumi/foundryvtt-drag-ruler/blob/master/README.md",
 	"changelog": "https://github.com/manuelVo/foundryvtt-drag-ruler/blob/master/CHANGELOG.md",
@@ -86,4 +86,4 @@
 	  "minimum": "10",
 	  "verified": "10.286"
 	}
-  }
+}

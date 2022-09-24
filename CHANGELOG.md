@@ -1,3 +1,8 @@
+## 1.12.13
+### Improvements/Bugfixes
+- The token will now follow the ruler no matter how much fps or how laggy the map is
+- Movements are more smooth
+
 ## 1.12.12
 ### Bugfixes
 - Minor improvements for less powerful computers

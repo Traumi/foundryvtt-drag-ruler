@@ -101,21 +101,9 @@ async function animateEntities(entities, draggedEntity, draggedRays, wasPaused) 
 			return {x: path.B.x, y: path.B.y, _id: entity.id};
 		});
 		await draggedEntity.scene.updateEmbeddedDocuments(draggedEntity.constructor.embeddedName, updates, {animate});
-		let nextmove = false;
-		let lastx = draggedEntity.x
-		let lasty = draggedEntity.y
-		while(!nextmove){
-			await sleep(75);
-			if(lastx == draggedEntity.x && lasty == draggedEntity.y)
-				nextmove = true;
-			else{
-				lastx = draggedEntity.x
-				lasty = draggedEntity.y
-			}
-		}
 		if (animate)
-			await Promise.all(entityPaths.map(({entity}) => CanvasAnimation.getAnimation(entity.movementAnimationName)?.promise));
-		
+			await Promise.all(entityPaths.map(({entity}) => CanvasAnimation.getAnimation(entity.animationName)?.promise));
+			
 		// This is a flag of the "Monk's Active Tile Triggers" module that signals that the movement should be cancelled early
 		if (this.cancelMovement) {
 			entityAnimationData.forEach(ead => ead.rays = ead.rays.slice(0, i + 1));

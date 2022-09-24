@@ -17,10 +17,13 @@ To install this module :
 
 -OR-
 
-- Download the archive in https://github.com/Traumi/foundryvtt-drag-ruler/releases/download/v1.12.12/drag-ruler-1.12.12.zip
+- Download the archive in https://github.com/Traumi/foundryvtt-drag-ruler/releases/download/v1.12.13/drag-ruler-1.12.13.zip
 - Replace the drag-ruler folder in FoundryData/Data/modules/drag-ruler by the one in the archive
 
 # Changelog
+
+1.12.13 (Stable)
+- Token will follow the designated path and not taking shortcuts accros walls sometimes
 
 1.12.12
 - Minor improvements for less powerful computers
