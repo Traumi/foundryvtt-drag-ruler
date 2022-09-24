@@ -105,7 +105,7 @@ async function animateEntities(entities, draggedEntity, draggedRays, wasPaused) 
 		let lastx = draggedEntity.x
 		let lasty = draggedEntity.y
 		while(!nextmove){
-			await sleep(30);
+			await sleep(75);
 			if(lastx == draggedEntity.x && lasty == draggedEntity.y)
 				nextmove = true;
 			else{

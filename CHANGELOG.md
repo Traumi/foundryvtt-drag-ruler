@@ -1,3 +1,7 @@
+## 1.12.12
+### Bugfixes
+- Minor improvements for less powerful computers
+
 ## 1.12.11
 ### Bugfixes
 - Fixed the waypoints that were not working on gridless maps
