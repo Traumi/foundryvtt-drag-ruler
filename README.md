@@ -23,7 +23,7 @@ To install this module :
 # Changelog
 
 1.12.13 (Stable)
-- Token will follow the designated path and not taking shortcuts accros walls sometimes
+- Token will follow the designated path and not taking shortcuts across walls sometimes
 
 1.12.12
 - Minor improvements for less powerful computers
