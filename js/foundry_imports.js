@@ -23,14 +23,7 @@ export async function moveEntities(draggedEntity, selectedEntities) {
 
 	// Get the movement rays and check collision along each Ray
 	// These rays are center-to-center for the purposes of collision checking
-	//const rays = this.dragRulerGetRaysFromWaypoints(this.waypoints, this.destination);
-	if ( this.destination )
-	this.waypoints = this.waypoints.concat([this.destination]);
-	const rays = this.waypoints.slice(1).map((wp, i) => {
-		const ray =  new Ray(this.waypoints[i], wp);
-		ray.isPrevious = Boolean(this.waypoints[i].isPrevious);
-		return ray;
-	});
+	const rays = CONFIG.Canvas.rulerClass.dragRulerGetRaysFromWaypoints(this.waypoints, this.destination);
 
 	if (!game.user.isGM && draggedEntity instanceof Token) {
 		const hasCollision = selectedEntities.some(token => {
@@ -112,10 +105,6 @@ async function animateEntities(entities, draggedEntity, draggedRays, wasPaused) 
 	}
 	if (isToken)
 		trackRays(entities, entityAnimationData.map(({rays}) => rays)).then(() => recalculate(entities));
-}
-
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 function calculateEntityOffset(entityA, entityB) {
