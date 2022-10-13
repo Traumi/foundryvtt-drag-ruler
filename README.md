@@ -1,3 +1,10 @@
+# Important Information
+
+Since Drag Ruler has been updated, this project will return to the original branch
+Thank you for all your feedbacks
+
+/!\ If you are using the pathfinding part of the project, it was removed from the project and is now a new project : https://foundryvtt.com/packages/routinglib
+
 # Drag Ruler Temporary fix
 This project is a temporary fix for drag-ruler and is not the official mod
 
@@ -22,6 +29,9 @@ To install this module :
 
 # Changelog
 
+1.13.0
+- Original Branch, this project will take his retreat ;)
+
 1.12.13 (Stable)
 - Token will follow the designated path and not taking shortcuts across walls sometimes
 
@@ -33,7 +43,3 @@ To install this module :
 
 1.12.10
 - Fixed the pathfinding part
-
-# Known Bug
-
-- No one for now :)
