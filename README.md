@@ -1,7 +1,7 @@
 # Important Information
 
 Since Drag Ruler has been updated, this project will return to the original branch
-Thank you for all your feedbacks
+Thank you for all your feedbacks and for using the patch
 
 /!\ If you are using the pathfinding part of the project, it was removed from the project and is now a new project : https://foundryvtt.com/packages/routinglib
 
